@@ -3,6 +3,7 @@ package com.hotbitmapgg.bilibili.network;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.hotbitmapgg.bilibili.BilibiliApp;
 import com.hotbitmapgg.bilibili.network.api.AccountService;
+import com.hotbitmapgg.bilibili.network.api.AuthService;
 import com.hotbitmapgg.bilibili.network.api.BangumiService;
 import com.hotbitmapgg.bilibili.network.api.BiliApiService;
 import com.hotbitmapgg.bilibili.network.api.BiliAppService;
@@ -45,47 +46,51 @@ public class RetrofitHelper {
     }
 
     public static LiveService getLiveAPI() {
-        return createApi(LiveService.class, ApiConstants.LIVE_BASE_URL);
+        return createApi(LiveService.class, ApiConstants.INSTANCE.getLIVE_BASE_URL());
     }
 
     public static BiliAppService getBiliAppAPI() {
-        return createApi(BiliAppService.class, ApiConstants.APP_BASE_URL);
+        return createApi(BiliAppService.class, ApiConstants.INSTANCE.getAPP_BASE_URL());
     }
 
     public static BiliApiService getBiliAPI() {
-        return createApi(BiliApiService.class, ApiConstants.API_BASE_URL);
+        return createApi(BiliApiService.class, ApiConstants.INSTANCE.getAPI_BASE_URL());
     }
 
     public static BiliGoService getBiliGoAPI() {
-        return createApi(BiliGoService.class, ApiConstants.BILI_GO_BASE_URL);
+        return createApi(BiliGoService.class, ApiConstants.INSTANCE.getBILI_GO_BASE_URL());
     }
 
     public static RankService getRankAPI() {
-        return createApi(RankService.class, ApiConstants.RANK_BASE_URL);
+        return createApi(RankService.class, ApiConstants.INSTANCE.getRANK_BASE_URL());
     }
 
     public static UserService getUserAPI() {
-        return createApi(UserService.class, ApiConstants.USER_BASE_URL);
+        return createApi(UserService.class, ApiConstants.INSTANCE.getUSER_BASE_URL());
     }
 
     public static VipService getVipAPI() {
-        return createApi(VipService.class, ApiConstants.VIP_BASE_URL);
+        return createApi(VipService.class, ApiConstants.INSTANCE.getVIP_BASE_URL());
     }
 
     public static BangumiService getBangumiAPI() {
-        return createApi(BangumiService.class, ApiConstants.BANGUMI_BASE_URL);
+        return createApi(BangumiService.class, ApiConstants.INSTANCE.getBANGUMI_BASE_URL());
     }
 
     public static SearchService getSearchAPI() {
-        return createApi(SearchService.class, ApiConstants.SEARCH_BASE_URL);
+        return createApi(SearchService.class, ApiConstants.INSTANCE.getSEARCH_BASE_URL());
     }
 
     public static AccountService getAccountAPI() {
-        return createApi(AccountService.class, ApiConstants.ACCOUNT_BASE_URL);
+        return createApi(AccountService.class, ApiConstants.INSTANCE.getACCOUNT_BASE_URL());
     }
 
     public static Im9Service getIm9API() {
-        return createApi(Im9Service.class, ApiConstants.IM9_BASE_URL);
+        return createApi(Im9Service.class, ApiConstants.INSTANCE.getIM9_BASE_URL());
+    }
+
+    public static AuthService getAuthAPI() {
+        return createApi(AuthService.class, ApiConstants.INSTANCE.getAUTH_BASE_URL());
     }
 
     /**
@@ -123,6 +128,7 @@ public class RetrofitHelper {
                             .writeTimeout(20, TimeUnit.SECONDS)
                             .readTimeout(20, TimeUnit.SECONDS)
                             .addInterceptor(new UserAgentInterceptor())
+
                             .build();
                 }
             }
@@ -139,7 +145,7 @@ public class RetrofitHelper {
             Request originalRequest = chain.request();
             Request requestWithUserAgent = originalRequest.newBuilder()
                     .removeHeader("User-Agent")
-                    .addHeader("User-Agent", ApiConstants.COMMON_UA_STR)
+                    .addHeader("User-Agent", ApiConstants.INSTANCE.getCOMMON_UA_STR())
                     .build();
             return chain.proceed(requestWithUserAgent);
         }

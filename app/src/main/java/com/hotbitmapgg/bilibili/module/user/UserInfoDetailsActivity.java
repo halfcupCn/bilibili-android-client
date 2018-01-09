@@ -254,44 +254,32 @@ public class UserInfoDetailsActivity extends RxBaseActivity {
         RetrofitHelper.getUserAPI()
                 .getUserContributeVideos(mid, 1, 10)
                 .compose(this.bindToLifecycle())
-                .flatMap(new Func1<UserContributeInfo, Observable<UserInterestQuanInfo>>() {
-                    @Override
-                    public Observable<UserInterestQuanInfo> call(UserContributeInfo userContributeInfo) {
-                        mUserContributeInfo = userContributeInfo;
-                        userContributeCount = userContributeInfo.getData().getCount();
-                        userContributes.addAll(userContributeInfo.getData().getVlist());
-                        return RetrofitHelper.getIm9API().getUserInterestQuanData(mid, 1, 10);
-                    }
+                .flatMap(userContributeInfo -> {
+                    mUserContributeInfo = userContributeInfo;
+                    userContributeCount = userContributeInfo.getData().getCount();
+                    userContributes.addAll(userContributeInfo.getData().getVlist());
+                    return RetrofitHelper.getIm9API().getUserInterestQuanData(mid, 1, 10);
                 })
                 .compose(bindToLifecycle())
-                .flatMap(new Func1<UserInterestQuanInfo, Observable<UserCoinsInfo>>() {
-                    @Override
-                    public Observable<UserCoinsInfo> call(UserInterestQuanInfo userInterestQuanInfo) {
-                        mUserInterestQuanInfo = userInterestQuanInfo;
-                        userInterestQuanCount = userInterestQuanInfo.getData().getTotal_count();
-                        userInterestQuans.addAll(userInterestQuanInfo.getData().getResult());
-                        return RetrofitHelper.getUserAPI().getUserCoinVideos(mid);
-                    }
+                .flatMap(userInterestQuanInfo -> {
+                    mUserInterestQuanInfo = userInterestQuanInfo;
+                    userInterestQuanCount = userInterestQuanInfo.getData().getTotal_count();
+                    userInterestQuans.addAll(userInterestQuanInfo.getData().getResult());
+                    return RetrofitHelper.getUserAPI().getUserCoinVideos(mid);
                 })
                 .compose(bindToLifecycle())
-                .flatMap(new Func1<UserCoinsInfo, Observable<UserPlayGameInfo>>() {
-                    @Override
-                    public Observable<UserPlayGameInfo> call(UserCoinsInfo userCoinsInfo) {
-                        mUserCoinsInfo = userCoinsInfo;
-                        userCoinsCount = userCoinsInfo.getData().getCount();
-                        userCoins.addAll(userCoinsInfo.getData().getList());
-                        return RetrofitHelper.getUserAPI().getUserPlayGames(mid);
-                    }
+                .flatMap(userCoinsInfo -> {
+                    mUserCoinsInfo = userCoinsInfo;
+                    userCoinsCount = userCoinsInfo.getData().getCount();
+                    userCoins.addAll(userCoinsInfo.getData().getList());
+                    return RetrofitHelper.getUserAPI().getUserPlayGames(mid);
                 })
                 .compose(bindToLifecycle())
-                .flatMap(new Func1<UserPlayGameInfo, Observable<UserLiveRoomStatusInfo>>() {
-                    @Override
-                    public Observable<UserLiveRoomStatusInfo> call(UserPlayGameInfo userPlayGameInfo) {
-                        mUserPlayGameInfo = userPlayGameInfo;
-                        userPlayGameCount = userPlayGameInfo.getData().getCount();
-                        userPlayGames.addAll(userPlayGameInfo.getData().getGames());
-                        return RetrofitHelper.getLiveAPI().getUserLiveRoomStatus(mid);
-                    }
+                .flatMap(userPlayGameInfo -> {
+                    mUserPlayGameInfo = userPlayGameInfo;
+                    userPlayGameCount = userPlayGameInfo.getData().getCount();
+                    userPlayGames.addAll(userPlayGameInfo.getData().getGames());
+                    return RetrofitHelper.getLiveAPI().getUserLiveRoomStatus(mid);
                 })
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
