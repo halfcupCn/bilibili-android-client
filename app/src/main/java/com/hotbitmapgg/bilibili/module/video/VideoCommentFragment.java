@@ -87,7 +87,7 @@ public class VideoCommentFragment extends RxLazyFragment {
     @Override
     protected void loadData() {
         int ver = 3;
-        RetrofitHelper.getBiliAPI()
+        RetrofitHelper.INSTANCE.getBiliAPI()
                 .getVideoComment(aid, pageNum, pageSize, ver)
                 .compose(this.bindToLifecycle())
                 .subscribeOn(Schedulers.io())

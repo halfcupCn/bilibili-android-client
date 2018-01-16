@@ -113,7 +113,7 @@ public class SpecialDetailsActivity extends RxBaseActivity {
 
     @Override
     public void loadData() {
-        RetrofitHelper.getBiliAPI()
+        RetrofitHelper.INSTANCE.getBiliAPI()
                 .getSpInfo(spid, title)
                 .compose(this.bindToLifecycle())
                 .doOnSubscribe(this::showProgressBar)
@@ -121,7 +121,7 @@ public class SpecialDetailsActivity extends RxBaseActivity {
                     @Override
                     public Observable<SpecialTopicIResult> call(SpecialTopic specialTopic) {
                         mSpecialTopic = specialTopic;
-                        return RetrofitHelper.getBiliAPI()
+                        return RetrofitHelper.INSTANCE.getBiliAPI()
                                 .getSpItemList(spid, season_id, 1);
                     }
                 })

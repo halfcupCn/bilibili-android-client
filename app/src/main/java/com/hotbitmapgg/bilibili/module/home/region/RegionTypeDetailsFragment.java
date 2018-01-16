@@ -96,7 +96,7 @@ public class RegionTypeDetailsFragment extends RxLazyFragment {
 
     @Override
     protected void loadData() {
-        RetrofitHelper.getBiliAppAPI()
+        RetrofitHelper.INSTANCE.getBiliAppAPI()
                 .getRegionDetails(rid)
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())

@@ -69,7 +69,7 @@ public class AllAreasRankFragment extends RxLazyFragment {
 
     @Override
     protected void loadData() {
-        RetrofitHelper.getRankAPI()
+        RetrofitHelper.INSTANCE.getRankAPI()
                 .getAllareasRanks(type)
                 .compose(bindToLifecycle())
                 .map(allareasRankInfo -> allareasRankInfo.getRank().getList())

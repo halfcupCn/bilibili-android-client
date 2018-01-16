@@ -6,19 +6,27 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
 import com.hotbitmapgg.bilibili.base.RxBaseActivity;
+import com.hotbitmapgg.bilibili.network.RetrofitHelper;
+import com.hotbitmapgg.bilibili.network.auxiliary.ApiConstants;
 import com.hotbitmapgg.bilibili.utils.CommonUtil;
 import com.hotbitmapgg.bilibili.utils.ConstantUtil;
 import com.hotbitmapgg.bilibili.utils.PreferenceUtil;
 import com.hotbitmapgg.bilibili.utils.ToastUtil;
 import com.hotbitmapgg.ohmybilibili.R;
 
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by hcc on 16/8/7 14:12
@@ -129,9 +137,41 @@ public class LoginActivity extends RxBaseActivity {
             ToastUtil.ShortToast("密码不能为空");
             return;
         }
-
-        PreferenceUtil.putBoolean(ConstantUtil.KEY, true);
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-        finish();
+        HashMap<String, Object> keys = new HashMap<>();
+//        appkey=1d8b6e7d45233436&build=509000&mobi_app=android&platform=android&ts=1515334398&sign=57b9335a6e680b761a4719387b153931
+        keys.put("appkey", ApiConstants.INSTANCE.getAPP_KEY());
+        keys.put("build", ApiConstants.INSTANCE.getBUILD());
+        keys.put("mobi_app", "android");
+        keys.put("platform", "android");
+        keys.put("ts", System.currentTimeMillis() / 1000);
+        RetrofitHelper.INSTANCE.getAuthAPI().getKey(keys)
+                .compose(bindToLifecycle())
+                .flatMap(key -> {
+                    //保存auth key到本地或仅在内存中
+                    PreferenceUtil.put("auth_key", new Gson().toJson(key.getData()));
+                    HashMap<String, Object> loginMap = new HashMap<>();
+                    loginMap.put("appkey", ApiConstants.INSTANCE.getAPP_KEY());
+                    loginMap.put("build", ApiConstants.INSTANCE.getBUILD());
+                    loginMap.put("mobi_app", "android");
+                    loginMap.put("password", "");
+                    loginMap.put("platform", "android");
+                    loginMap.put("ts", System.currentTimeMillis() / 1000);
+                    loginMap.put("username", name);
+                    return RetrofitHelper.INSTANCE.getAuthAPI().login(loginMap);
+                })
+                .doOnNext(oauthToken -> {
+                    //save token
+                    PreferenceUtil.put("auth_token", new Gson().toJson(oauthToken.getData()));
+                })
+                .doOnError(Throwable::printStackTrace)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(oauthToken -> {
+                    //登录成功，go!
+                    Log.v("TAG", "response == " + new Gson().toJson(oauthToken));
+                    PreferenceUtil.putBoolean(ConstantUtil.KEY, true);
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
+                });
     }
 }

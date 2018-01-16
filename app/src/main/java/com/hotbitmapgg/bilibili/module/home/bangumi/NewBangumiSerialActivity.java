@@ -53,7 +53,7 @@ public class NewBangumiSerialActivity extends RxBaseActivity {
 
     @Override
     public void loadData() {
-        RetrofitHelper.getBiliGoAPI()
+        RetrofitHelper.INSTANCE.getBiliGoAPI()
                 .getNewBangumiSerialList()
                 .compose(this.bindToLifecycle())
                 .doOnSubscribe(this::showProgressBar)

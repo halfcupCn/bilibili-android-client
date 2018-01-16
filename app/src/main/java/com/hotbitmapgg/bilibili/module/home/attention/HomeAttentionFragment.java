@@ -81,7 +81,7 @@ public class HomeAttentionFragment extends RxLazyFragment {
 
     @Override
     protected void loadData() {
-        RetrofitHelper.getBiliAPI()
+        RetrofitHelper.INSTANCE.getBiliAPI()
                 .getAttentionDynamic()
                 .compose(bindToLifecycle())
                 .map(attentionDynamicInfo -> attentionDynamicInfo.getData().getFeeds())

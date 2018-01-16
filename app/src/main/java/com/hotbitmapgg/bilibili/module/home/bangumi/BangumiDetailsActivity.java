@@ -119,7 +119,7 @@ public class BangumiDetailsActivity extends RxBaseActivity {
 
     @Override
     public void loadData() {
-        RetrofitHelper.getBangumiAPI()
+        RetrofitHelper.INSTANCE.getBangumiAPI()
                 .getBangumiDetails()
                 .compose(bindToLifecycle())
                 .doOnSubscribe(this::showProgressBar)
@@ -127,7 +127,7 @@ public class BangumiDetailsActivity extends RxBaseActivity {
                     @Override
                     public Observable<BangumiDetailsRecommendInfo> call(BangumiDetailsInfo bangumiDetailsInfo) {
                         result = bangumiDetailsInfo.getResult();
-                        return RetrofitHelper.getBangumiAPI().getBangumiDetailsRecommend();
+                        return RetrofitHelper.INSTANCE.getBangumiAPI().getBangumiDetailsRecommend();
                     }
                 })
                 .compose(bindToLifecycle())
@@ -136,7 +136,7 @@ public class BangumiDetailsActivity extends RxBaseActivity {
                     @Override
                     public Observable<BangumiDetailsCommentInfo> call(List<BangumiDetailsRecommendInfo.ResultBean.ListBean> listBeans) {
                         bangumiRecommends.addAll(listBeans);
-                        return RetrofitHelper.getBiliAPI().getBangumiDetailsComments();
+                        return RetrofitHelper.INSTANCE.getBiliAPI().getBangumiDetailsComments();
                     }
                 })
                 .compose(bindToLifecycle())

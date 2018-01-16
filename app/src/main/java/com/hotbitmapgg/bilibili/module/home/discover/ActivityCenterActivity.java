@@ -110,7 +110,7 @@ public class ActivityCenterActivity extends RxBaseActivity {
 
     @Override
     public void loadData() {
-        RetrofitHelper.getBiliAPI()
+        RetrofitHelper.INSTANCE.getBiliAPI()
                 .getActivityCenterList(pageNum, pageSize)
                 .compose(bindToLifecycle())
                 .delay(1000, TimeUnit.MILLISECONDS)

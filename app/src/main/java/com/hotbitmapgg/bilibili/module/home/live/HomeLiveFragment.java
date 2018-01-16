@@ -87,7 +87,7 @@ public class HomeLiveFragment extends RxLazyFragment {
 
     @Override
     protected void loadData() {
-        RetrofitHelper.getLiveAPI()
+        RetrofitHelper.INSTANCE.getLiveAPI()
                 .getLiveAppIndex()
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())

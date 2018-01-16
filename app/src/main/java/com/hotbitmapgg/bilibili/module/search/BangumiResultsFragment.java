@@ -102,7 +102,7 @@ public class BangumiResultsFragment extends RxLazyFragment {
 
     @Override
     protected void loadData() {
-        RetrofitHelper.getBiliAppAPI()
+        RetrofitHelper.INSTANCE.getBiliAppAPI()
                 .searchBangumi(content, pageNum, pageSize)
                 .compose(bindToLifecycle())
                 .map(SearchBangumiInfo::getData)

@@ -93,7 +93,7 @@ public class BangumiIndexActivity extends RxBaseActivity {
 
   @Override
   public void loadData() {
-    RetrofitHelper.getBangumiAPI()
+    RetrofitHelper.INSTANCE.getBangumiAPI()
         .getBangumiIndex()
         .compose(this.bindToLifecycle())
         .doOnSubscribe(this::showProgressBar)

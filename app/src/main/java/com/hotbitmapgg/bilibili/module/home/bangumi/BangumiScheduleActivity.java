@@ -86,7 +86,7 @@ public class BangumiScheduleActivity extends RxBaseActivity {
 
     @Override
     public void loadData() {
-        RetrofitHelper.getBangumiAPI()
+        RetrofitHelper.INSTANCE.getBangumiAPI()
                 .getBangumiSchedules()
                 .compose(bindToLifecycle())
                 .doOnSubscribe(this::showProgressBar)

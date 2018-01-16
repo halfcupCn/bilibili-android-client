@@ -132,19 +132,16 @@ public class HomeBangumiFragment extends RxLazyFragment {
 
     @Override
     protected void loadData() {
-        RetrofitHelper.getBangumiAPI()
+        RetrofitHelper.INSTANCE.getBangumiAPI()
                 .getBangumiAppIndex()
                 .compose(bindToLifecycle())
-                .flatMap(new Func1<BangumiAppIndexInfo, Observable<BangumiRecommendInfo>>() {
-                    @Override
-                    public Observable<BangumiRecommendInfo> call(BangumiAppIndexInfo bangumiAppIndexInfo) {
-                        banners.addAll(bangumiAppIndexInfo.getResult().getAd().getHead());
-                        bangumibobys.addAll(bangumiAppIndexInfo.getResult().getAd().getBody());
-                        seasonNewBangumis.addAll(bangumiAppIndexInfo.getResult().getPrevious().getList());
-                        season = bangumiAppIndexInfo.getResult().getPrevious().getSeason();
-                        newBangumiSerials.addAll(bangumiAppIndexInfo.getResult().getSerializing());
-                        return RetrofitHelper.getBangumiAPI().getBangumiRecommended();
-                    }
+                .flatMap(bangumiAppIndexInfo -> {
+                    banners.addAll(bangumiAppIndexInfo.getResult().getAd().getHead());
+                    bangumibobys.addAll(bangumiAppIndexInfo.getResult().getAd().getBody());
+                    seasonNewBangumis.addAll(bangumiAppIndexInfo.getResult().getPrevious().getList());
+                    season = bangumiAppIndexInfo.getResult().getPrevious().getSeason();
+                    newBangumiSerials.addAll(bangumiAppIndexInfo.getResult().getSerializing());
+                    return RetrofitHelper.INSTANCE.getBangumiAPI().getBangumiRecommended();
                 })
                 .compose(bindToLifecycle())
                 .map(BangumiRecommendInfo::getResult)

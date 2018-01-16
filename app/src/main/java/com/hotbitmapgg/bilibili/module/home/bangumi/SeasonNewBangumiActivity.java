@@ -58,7 +58,7 @@ public class SeasonNewBangumiActivity extends RxBaseActivity {
 
     @Override
     public void loadData() {
-        RetrofitHelper.getBangumiAPI()
+        RetrofitHelper.INSTANCE.getBangumiAPI()
                 .getSeasonNewBangumiList()
                 .compose(bindToLifecycle())
                 .doOnSubscribe(this::showProgressBar)
