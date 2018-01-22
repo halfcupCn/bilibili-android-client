@@ -168,10 +168,9 @@ public class LoginActivity extends RxBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(oauthToken -> {
                     //登录成功，go!
-                    Log.v("TAG", "response == " + new Gson().toJson(oauthToken));
-                    PreferenceUtil.putBoolean(ConstantUtil.KEY, true);
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();
+//                    PreferenceUtil.putBoolean(ConstantUtil.KEY, true);
+//                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                    finish();
                 });
     }
 }

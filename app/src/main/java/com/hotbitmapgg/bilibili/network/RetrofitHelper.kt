@@ -95,8 +95,8 @@ object RetrofitHelper {
                             .writeTimeout(30, TimeUnit.SECONDS)
                             .readTimeout(30, TimeUnit.SECONDS)
                             .addInterceptor(UserAgentInterceptor())
-                            .addInterceptor(SignInterceptor())
                             .addInterceptor(HeaderInterceptor())
+                            .addInterceptor(SignInterceptor())
                             .build()
                 }
             }

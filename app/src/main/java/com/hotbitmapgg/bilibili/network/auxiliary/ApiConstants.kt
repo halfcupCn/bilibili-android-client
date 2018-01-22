@@ -66,7 +66,7 @@ object ApiConstants {
         val encodedQuery = nameAndValues.joinToString { "&" }
         try {
             val messageDigest = MessageDigest.getInstance("MD5")
-            messageDigest.update(buildString { encodedQuery + APP_SECRET }.toByteArray())
+            messageDigest.update((encodedQuery + APP_SECRET).toByteArray())
             val md5 = BigInteger(1, messageDigest.digest()).toString(16)
             //md5 不满 32 位时左边加 0
             return ("00000000000000000000000000000000" + md5).substring(md5.length)
@@ -77,11 +77,11 @@ object ApiConstants {
 
     //排序 params 并计算 sign
     //传入值为 name1=value1 形式
-    fun calculateSign(nameAndValues: HashMap<String, Any>): String {
-        val encodedQuery = nameAndValues.map { "$it.key=$it.value" }.joinToString { "&" }
+    fun calculateSign(nameAndValues: HashMap<String, String>): String {
+        val encodedQuery = nameAndValues.map { "${it.key}=${it.value}" }.sorted().joinToString("&")
         try {
             val messageDigest = MessageDigest.getInstance("MD5")
-            messageDigest.update(buildString { encodedQuery + APP_SECRET }.toByteArray())
+            messageDigest.update((encodedQuery + APP_SECRET).toByteArray())
             val md5 = BigInteger(1, messageDigest.digest()).toString(16)
             //md5 不满 32 位时左边加 0
             return ("00000000000000000000000000000000" + md5).substring(md5.length)
